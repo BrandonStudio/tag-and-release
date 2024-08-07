@@ -1,0 +1,24 @@
+name: Check consistency of dist files
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  dist_check:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build
+      run:
+        ncc build src/index.ts --license LICENSE.txt
+    - name: Check
+      run: |
+        git diff dist/ | tee .git-diff-dist-check-result
+        if [ -s .git-diff-dist-check-result ]; then
+          echo "dist/ is not up-to-date. Please run 'ncc build src/index.ts --license LICENSE.txt' and commit the changes."
+          exit 1
+        fi

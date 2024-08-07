@@ -1,4 +1,4 @@
-name: 'Tag and Release'
+name: 'Tag and Release (New)'
 description: 'Creates a new GitHub release from a specified commit'
 inputs:
   tag_name:

@@ -12,11 +12,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Tag and create release ${{ inputs.version }}
+      id: release
       uses: ./
       with:
         tag_name: ${{ inputs.version }}
-        name: Release ${{ inputs.version }}
+        release_name: Release ${{ inputs.version }}
         #discussion_catagory_name: 'Announcements'
         generate_release_notes: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Get the output
+      run: echo "The release ID is ${{ steps.release.outputs.id }}"

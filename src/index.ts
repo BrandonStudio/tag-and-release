@@ -17,7 +17,7 @@ async function main() {
   const R = Octokit.plugin(restEndpointMethods);
   const octokit = new R({ auth: process.env.GITHUB_TOKEN });
 
-  console.debug('discussion_category_name: ' + discussion_category_name);
+  console.debug('discussion_category_name: ' + typeof discussion_category_name);
 
   const r = await octokit.rest.repos.createRelease({
     owner: context.repo.owner,
@@ -33,12 +33,18 @@ async function main() {
     make_latest,
   });
 
+  console.debug('creation done: ' + JSON.stringify(r.data));
+
   setOutput('id', r.data.id.toString());
   setOutput('html_url', r.data.html_url);
   setOutput('upload_url', r.data.upload_url);
   setOutput('discussion_url', r.data.discussion_url);
+
+  console.debug('outputs set.');
 }
 
 main().catch(function(error) {
+  console.debug('debug2');
+  console.error('exception thrown 2: ' + JSON.stringify(error));
   setFailed(error.message);
 });

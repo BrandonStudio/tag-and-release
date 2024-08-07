@@ -6,18 +6,23 @@ import { restEndpointMethods } from '@octokit/plugin-rest-endpoint-methods';
 async function main() {
   const commit = getInput('commit') || context.sha;
   const tagName = getInput('tag_name', { required: true });
-  const releaseName = getInput('release_name') || tagName;
+  let releaseName = getInput('release_name');
   const body = getInput('body');
   const draft = getInput('draft') === 'true';
   const prerelease = getInput('prerelease') === 'true';
-  const discussion_category_name = getInput('discussion_category_name');
+  let discussion_category_name: string | undefined = getInput('discussion_category_name');
   const generate_release_notes = getInput('generate_release_notes') === 'true';
   const make_latest = getInput('make_latest') as 'true' | 'false' | 'legacy';
 
+  if (releaseName.trim() === '') {
+    releaseName = tagName;
+  }
+  if (discussion_category_name.trim() === '') {
+    discussion_category_name = undefined;
+  }
+
   const R = Octokit.plugin(restEndpointMethods);
   const octokit = new R({ auth: process.env.GITHUB_TOKEN });
-
-  console.debug('discussion_category_name: ' + typeof discussion_category_name);
 
   const r = await octokit.rest.repos.createRelease({
     owner: context.repo.owner,

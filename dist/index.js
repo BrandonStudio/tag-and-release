@@ -29211,16 +29211,21 @@ function main() {
     return __awaiter(this, void 0, void 0, function* () {
         const commit = (0, core_1.getInput)('commit') || github_1.context.sha;
         const tagName = (0, core_1.getInput)('tag_name', { required: true });
-        const releaseName = (0, core_1.getInput)('release_name') || tagName;
+        let releaseName = (0, core_1.getInput)('release_name');
         const body = (0, core_1.getInput)('body');
         const draft = (0, core_1.getInput)('draft') === 'true';
         const prerelease = (0, core_1.getInput)('prerelease') === 'true';
-        const discussion_category_name = (0, core_1.getInput)('discussion_category_name');
+        let discussion_category_name = (0, core_1.getInput)('discussion_category_name');
         const generate_release_notes = (0, core_1.getInput)('generate_release_notes') === 'true';
         const make_latest = (0, core_1.getInput)('make_latest');
+        if (releaseName.trim() === '') {
+            releaseName = tagName;
+        }
+        if (discussion_category_name.trim() === '') {
+            discussion_category_name = undefined;
+        }
         const R = core_2.Octokit.plugin(plugin_rest_endpoint_methods_1.restEndpointMethods);
         const octokit = new R({ auth: process.env.GITHUB_TOKEN });
-        console.debug('discussion_category_name: ' + typeof discussion_category_name);
         const r = yield octokit.rest.repos.createRelease({
             owner: github_1.context.repo.owner,
             repo: github_1.context.repo.repo,

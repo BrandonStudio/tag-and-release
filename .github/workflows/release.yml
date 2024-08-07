@@ -1,21 +1,19 @@
 name: Release
 on:
-  push:
-    branches:
-      - release
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version'
+        required: true
 
 jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: avakar/derive-version@03dcaa4e9eb54dc4eb10845fde513399ae876f82
-      id: version
-      with:
-        file: VERSION
-    - name: Tag and create release v${{ steps.version.outputs.version }}
+    - uses: actions/checkout@v4
+    - name: Tag and create release v${{ inputs.version }}
       uses: ./
       with:
-        tag_name: v${{ steps.version.outputs.version }}
+        tag_name: v${{ inputs.version }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

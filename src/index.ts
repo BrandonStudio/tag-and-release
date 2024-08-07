@@ -49,7 +49,6 @@ async function main() {
 }
 
 main().catch(function(error) {
-  console.debug('debug2');
-  console.error('exception thrown 2: ' + JSON.stringify(error));
+  console.debug('exception thrown: ' + JSON.stringify(error));
   setFailed(error.message);
 });

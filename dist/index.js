@@ -29248,8 +29248,7 @@ function main() {
     });
 }
 main().catch(function (error) {
-    console.debug('debug2');
-    console.error('exception thrown 2: ' + JSON.stringify(error));
+    console.debug('exception thrown: ' + JSON.stringify(error));
     (0, core_1.setFailed)(error.message);
 });
 

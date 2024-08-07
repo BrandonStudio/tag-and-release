@@ -1,0 +1,41 @@
+#!/bin/sh
+#
+# Automatically compile staged src/index.ts to dist/index.js before committing.
+
+STAGED_FILE="src/index.ts"
+TEMP_DIR="/tmp/staged_index"
+TSCONFIG="tsconfig.json"
+
+if git diff --cached --name-only | grep -q "$STAGED_FILE"; then
+    echo "Compiling staged version of $STAGED_FILE to dist/index.js"
+
+    # Create a temporary directory
+    CURRENT_DIR=$(pwd)
+    mkdir -p $TEMP_DIR/src
+
+    # Copy the staged file to a temporary location
+    cp -rf * $TEMP_DIR/
+    git show :$STAGED_FILE > $TEMP_DIR/$STAGED_FILE
+    for file in $(git diff --name-only); do
+        git show :$file > $TEMP_DIR/$file
+    done
+
+    # cd to the temporary directory
+    cd $TEMP_DIR
+
+    # Edit path in tsconfig.json
+    sed -i 's/"src\/index.ts"/"tmp\/staged_index.ts"/' $TSCONFIG
+
+    # Compile the staged file
+    ncc build $STAGED_FILE --license LICENSE.txt || exit 1
+
+    # Move the compiled file to the dist directory
+    cp -rf dist $CURRENT_DIR/ || exit 1
+    cd $CURRENT_DIR
+
+    # Add the compiled file to the staging area
+    git add dist/*
+
+    # Clean up
+    rm -rf $TEMP_DIR
+fi

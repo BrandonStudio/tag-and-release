@@ -1,6 +1,8 @@
-# GitHub Action &ndash; Tag and Release
+# GitHub Action &ndash; Tag and Release (New)
 
 Automatically create tags and corresponding releases.
+
+Based on [avakar/tag-and-release](https://github.com/avakar/tag-and-release).
 
 ## Usage
 
@@ -13,17 +15,24 @@ is generally run on a tag push, expects the tag to already exist
 and only creates the release.
 
 The only mandatory input parameter is the tag name.
-
-    on: push
-    jobs:
-      release:
-        runs-on: ubuntu-latest
-        steps:
-          - uses: avakar/tag-and-release@v1
-            with:
-              tag_name: ${{ ... }}
-            env:
-              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```yaml
+on:
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'The name of the tag to create'
+        required: true
+        default: 'v1.0.0'
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: BrandonStudio/tag-and-release@v1
+        with:
+          tag_name: ${{ inputs.tag_name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
 
 ### Inputs
 

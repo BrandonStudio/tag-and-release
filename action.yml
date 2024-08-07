@@ -1,5 +1,9 @@
 name: 'Tag and Release (New)'
 description: 'Creates a new GitHub release from a specified commit'
+author: 'BrandonStudio'
+branding:
+  icon: 'tag'
+  color: 'blue'
 inputs:
   tag_name:
     description: 'The name of the tag.'

@@ -29220,6 +29220,7 @@ function main() {
         const make_latest = (0, core_1.getInput)('make_latest');
         const R = core_2.Octokit.plugin(plugin_rest_endpoint_methods_1.restEndpointMethods);
         const octokit = new R({ auth: process.env.GITHUB_TOKEN });
+        console.debug('discussion_category_name: ' + discussion_category_name);
         const r = yield octokit.rest.repos.createRelease({
             owner: github_1.context.repo.owner,
             repo: github_1.context.repo.repo,

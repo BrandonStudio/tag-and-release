@@ -17,6 +17,8 @@ async function main() {
   const R = Octokit.plugin(restEndpointMethods);
   const octokit = new R({ auth: process.env.GITHUB_TOKEN });
 
+  console.debug('discussion_category_name: ' + discussion_category_name);
+
   const r = await octokit.rest.repos.createRelease({
     owner: context.repo.owner,
     repo: context.repo.repo,

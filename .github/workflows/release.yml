@@ -11,9 +11,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - name: Tag and create release v${{ inputs.version }}
+    - name: Tag and create release ${{ inputs.version }}
       uses: ./
       with:
-        tag_name: v${{ inputs.version }}
+        tag_name: ${{ inputs.version }}
+        name: Release ${{ inputs.version }}
+        #discussion_catagory_name: 'Announcements'
+        generate_release_notes: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

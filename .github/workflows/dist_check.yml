@@ -11,13 +11,12 @@ jobs:
   dist_check:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
+    - uses: actions/checkout@v6
+    - uses: actions/setup-node@v6
       with:
-        node-version: '20'
-    - name: Setup ncc
+        node-version: '24'
+    - name: Install dependencies
       run: |
-        npm install -g @vercel/ncc typescript
         npm ci
     - name: Build
       run:
